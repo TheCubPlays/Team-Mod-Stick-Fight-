@@ -53,6 +53,10 @@ All commands are <ins>case insensitive</ins> (So "/prefix" = "/pReFiX")
 - `/reset teamColor`: Resets the teamColor option to default value.
 - `/reset enemyColor`: Resets the enemyColor option to default value.
 
+### <ins> Note </ins>
+
+- Your team's win counter won't necessarily have the same colour as your stickman, it has the team's colour. This means that if `useColors` is false (which means custom colors are disabled), your team's win counter will still have the team's colour regardless of you having default colors.
+
 ### How To Use
 
 In order for the mod to work properly, your team's members must have also added you to their team otherwise they'll be able to attack you and you'll be unable to.
