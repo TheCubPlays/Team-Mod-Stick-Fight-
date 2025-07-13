@@ -37,9 +37,9 @@ All commands are <ins>case insensitive</ins> (So "/prefix" = "/pReFiX")
 - `/useTeamColor`: Shows the current option for **useTeamColor** (True/False).
 - `/useTeamColor <True/False>`: When **true**, you & your team's members will **share** your team's custom color **(If useColors is also set to true)**. When **false**, you'll have the game's default colors.
 - `/useEnemyColor`: Shows the current option for **useEnemyColor** (True/False).
-- `/useEnemyColor <True/False>`: When **true**, enemy team members' will **share** their team's custom color **(If useColors is also set to true)**. When **false**, they'll have the game's default colors.
+- `/useEnemyColor <True/False>`: When **true**, enemy team members will **share** their team's custom color **(If useColors is also set to true)**. When **false**, they'll have the game's default colors.
 - `/useColors`: Shows the current option for **useColors** (True/False).
-- `/useColors <True/False>`: When **true**, all team members` will **share** their team's custom color **(If the corresponding useTeamColor/useEnemyColor options are also true)**. When **false**, they'll have the game's default colors (Regardless of the other 2 options).
+- `/useColors <True/False>`: When **true**, all team members will **share** their team's custom color **(If the corresponding useTeamColor/useEnemyColor options are also true)**. When **false**, they'll have the game's default colors (Regardless of the other 2 options).
 - `/teamColor`: Shows the hex color code of your team's color.
 - `/teamColor <HexColorCode>`: Configure your team's custom color **(Must use a hex color code with format like #FF0000 or #FF0000FF)**
 - `/enemyColor`: Shows the hex color code of the enemy team's color.
