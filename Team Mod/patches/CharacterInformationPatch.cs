@@ -27,5 +27,6 @@ class CharacterInformationPatch
         }
 
         MultiplayerManagerPatches.ChangeAllCharacterColors(color, __instance.gameObject);
+        Plugin.InitModText();
     }
 }
