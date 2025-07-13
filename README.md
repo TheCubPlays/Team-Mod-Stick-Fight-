@@ -65,6 +65,8 @@ So, say you get your 3 friends in your lobby to play. Say you're A and your frie
 Type `/scouter` to see which player corresponds to which color. If you wanna team up with C and their color is red, you'd type `/team add red`. Then, if you're yellow, C will also have to type `/team add yellow`. Now, congratulations, you and C are officially a team. B & D will have to do the same thing with each other. If they do that, you'll now have a functioning 2v2 lobby.
 Now, start the fight! :)
 
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/ad30d0ef-b1e2-42ce-a4ae-2b555371e736" />
+
 ## Installation Guide
 
 1. Download [BepInEx](https://github.com/BepInEx/BepInEx/releases/download/v5.4.19/BepInEx_x86_5.4.19.0.zip).
@@ -108,5 +110,3 @@ Parts of this code are adapted from their amazing [QOL Mod](https://github.com/M
 This project as a whole is licensed under the LGPL v3.0. See the [LICENSE](LICENSE) file for details.
 
 <ins>Note:</ins> Monky's QOL Mod is currently not compatible with this mod.
-
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/ad30d0ef-b1e2-42ce-a4ae-2b555371e736" />
