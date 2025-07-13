@@ -57,6 +57,7 @@ All commands are <ins>case insensitive</ins> (So "/prefix" = "/pReFiX")
 
 - Your team's win counter won't necessarily have the same colour as your stickman, it has the team's colour. This means that if `useColors` is false (which means custom colors are disabled), your team's win counter will still have the team's colour regardless of you having default colors.
 - If the last players standing are of the same team, the round won't end. That's mainly because if that was a thing, the mod could be used as a cheat client.
+- There's no limit to the amount of teammates you can have. It could be a 4v0, 3v1, 2v2, 2v1 and 1v1.
 
 ## How To Use
 
