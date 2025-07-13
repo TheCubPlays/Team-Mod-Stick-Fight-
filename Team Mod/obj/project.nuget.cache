@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "RqOgv8gqEgg=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\alexg\\Desktop\\Team Mod\\Mod.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\alexg\\.nuget\\packages\\microsoft.netframework.referenceassemblies\\1.0.3\\microsoft.netframework.referenceassemblies.1.0.3.nupkg.sha512",
+    "C:\\Users\\alexg\\.nuget\\packages\\microsoft.netframework.referenceassemblies.net35\\1.0.3\\microsoft.netframework.referenceassemblies.net35.1.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}

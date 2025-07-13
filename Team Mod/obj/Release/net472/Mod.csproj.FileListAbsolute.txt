@@ -1,0 +1,14 @@
+C:\Users\alexg\Desktop\Mod\obj\Release\net472\Mod.csproj.AssemblyReference.cache
+C:\Users\alexg\Desktop\Mod\obj\Release\net472\Mod.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\alexg\Desktop\Mod\obj\Release\net472\Mod.AssemblyInfoInputs.cache
+C:\Users\alexg\Desktop\Mod\obj\Release\net472\Mod.AssemblyInfo.cs
+C:\Users\alexg\Desktop\Mod\obj\Release\net472\Mod.csproj.CoreCompileInputs.cache
+C:\Users\alexg\Desktop\Mod\bin\Release\net472\Mod.dll
+C:\Users\alexg\Desktop\Mod\bin\Release\net472\Mod.pdb
+C:\Users\alexg\Desktop\Mod\bin\Release\net472\0Harmony.dll
+C:\Users\alexg\Desktop\Mod\bin\Release\net472\Assembly-CSharp.dll
+C:\Users\alexg\Desktop\Mod\bin\Release\net472\BepInEx.dll
+C:\Users\alexg\Desktop\Mod\bin\Release\net472\UnityEngine.dll
+C:\Users\alexg\Desktop\Mod\obj\Release\net472\Mod.csproj.Up2Date
+C:\Users\alexg\Desktop\Mod\obj\Release\net472\Mod.dll
+C:\Users\alexg\Desktop\Mod\obj\Release\net472\Mod.pdb

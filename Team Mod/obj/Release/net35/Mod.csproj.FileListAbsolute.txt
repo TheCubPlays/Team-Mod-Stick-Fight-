@@ -1,0 +1,18 @@
+C:\Users\alexg\Desktop\Team Mod\obj\Release\net35\Mod.csproj.AssemblyReference.cache
+C:\Users\alexg\Desktop\Team Mod\obj\Release\net35\Mod.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\alexg\Desktop\Team Mod\obj\Release\net35\Mod.AssemblyInfoInputs.cache
+C:\Users\alexg\Desktop\Team Mod\obj\Release\net35\Mod.AssemblyInfo.cs
+C:\Users\alexg\Desktop\Team Mod\obj\Release\net35\Mod.csproj.CoreCompileInputs.cache
+C:\Users\alexg\Desktop\Team Mod\bin\Release\net35\Team Mod.dll
+C:\Users\alexg\Desktop\Team Mod\bin\Release\net35\Team Mod.pdb
+C:\Users\alexg\Desktop\Team Mod\bin\Release\net35\0Harmony.dll
+C:\Users\alexg\Desktop\Team Mod\bin\Release\net35\Assembly-CSharp-firstpass.dll
+C:\Users\alexg\Desktop\Team Mod\bin\Release\net35\Assembly-CSharp.dll
+C:\Users\alexg\Desktop\Team Mod\bin\Release\net35\BepInEx.dll
+C:\Users\alexg\Desktop\Team Mod\bin\Release\net35\TextMeshPro-1.0.55.56.0b9.dll
+C:\Users\alexg\Desktop\Team Mod\bin\Release\net35\UnityEngine.dll
+C:\Users\alexg\Desktop\Team Mod\bin\Release\net35\UnityEngine.UI.dll
+C:\Users\alexg\Desktop\Team Mod\bin\Release\net35\Lidgren.Network.dll
+C:\Users\alexg\Desktop\Team Mod\obj\Release\net35\Mod.csproj.Up2Date
+C:\Users\alexg\Desktop\Team Mod\obj\Release\net35\Team Mod.dll
+C:\Users\alexg\Desktop\Team Mod\obj\Release\net35\Team Mod.pdb

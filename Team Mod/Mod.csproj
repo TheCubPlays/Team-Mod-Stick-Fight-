@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net35</TargetFramework>
+    <LangVersion>10.0</LangVersion>
+    <AssemblyName>Team Mod</AssemblyName>
+    <Description>A mod that allows you to create teams in Stick Fight!</Description>
+    <Version>1.1.1</Version>
+    <LangVersion>latest</LangVersion>
+    <RootNamespace>TMOD</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="UnityEngine">
+      <HintPath>libs/UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="BepInEx">
+      <HintPath>libs/BepInEx.dll</HintPath>
+    </Reference>
+    <Reference Include="0Harmony">
+      <HintPath>libs/0Harmony.dll</HintPath>
+    </Reference>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>libs/Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="TextMeshPro-1.0.55.56.0b9">
+      <HintPath>libs/Unity.TextMeshPro.dll</HintPath>
+    </Reference>
+    <Reference Include="Assembly-CSharp-firstpass">
+      <HintPath>libs/Assembly-CSharp-firstpass.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>libs/UnityEngine.UI.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
