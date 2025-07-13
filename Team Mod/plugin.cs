@@ -4,6 +4,8 @@ My files: ChatCommands.cs, CharacterInformationPatch.cs, FightingPatch.cs, OnLea
 Monky's files that were modified a good bit by me: MultiplayerManagerPaches.cs, Plugin.cs
 
 Note: I only grabbed what was essential from Monky's files (QOL Mod), so don't assume that's all he made in those. I also cut certain parts from some methods.
+
+Monky: https://github.com/Mn0ky
 */
 
 using System;
