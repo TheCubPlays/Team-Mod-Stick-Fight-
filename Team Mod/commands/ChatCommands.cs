@@ -462,7 +462,7 @@ public static class ChatCommands
 
         foreach (var player in Object.FindObjectsOfType<NetworkPlayer>())
         {
-            playerList.AppendLine($"{Helper.GetColorFromID(player.NetworkSpawnID)}: {Helper.GetPlayerName(Helper.GetSteamID(player.NetworkSpawnID))}");
+            playerList.AppendLine($"{Helper.GetColorFromID(player.NetworkSpawnID)}: {Helper.GetPlayerName(Helper.GetSteamID(player.NetworkSpawnID))}<#0000FF>");
         }
 
         Helper.SendModOutput(playerList.ToString(), Command.LogType.Info, false);
