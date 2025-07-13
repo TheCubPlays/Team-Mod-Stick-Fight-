@@ -71,5 +71,11 @@ Now, start the fight! :)
 - **Ice gun** won't damage or slow down your teammates, however it will still give them the ice particle making it look like it'll slow them down even though it won't.
 - **Thrusters** will still hurt your teammates with fire.
 - Sometimes, the custom colors can have weird bugs. Not sure what causes that yet, the bug itself is very inconsistent. It has a chance to occur when you change the player colors in-game. However I don't think this will happen often. When it happens, you have to rejoin the lobby.
+- The command auto-complete doesn't work with parameters yet.
+
+### Credits
+[Monky](https://github.com/Mn0ky)'s source code was very helpful in the making of this mod, particularly regarding custom colors and chat commands. The source code used was from their amazing QOL Mod which you should also check out: https://github.com/Mn0ky/QOL-Mod/tree/master?tab=readme-ov-file#installation
+
+<ins>Note: Monky's QOL Mod is currently not compatible with this mod.</ins>
 
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/ad30d0ef-b1e2-42ce-a4ae-2b555371e736" />
