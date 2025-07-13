@@ -44,11 +44,19 @@ All commands are <ins>case insensitive</ins> (So "/prefix" = "/pReFiX")
 - `/teamColor <HexColorCode>`: Configure your team's custom color **(Must use a hex color code with format like #FF0000 or #FF0000FF)**
 - `/enemyColor`: Shows the hex color code of the enemy team's color.
 - `/enemyColor <HexColorCode>`: Configure the enemy team's custom color **(Must use a hex color code with format like #FF0000 or #FF0000FF)**
+- `/reset config`: Resets all configuration settings to default values.
+- `/reset prefix`: Resets the prefix used for commands to default value.
+- `/reset teamWinsToggle`: Resets the teamWinsToggle option to default value.
+- `/reset useTeamColor`: Resets the useTeamColor option to default value.
+- `/reset useEnemyColor`: Resets the useEnemyColor option to default value.
+- `/reset useColors`: Resets the useColors option to default value.
+- `/reset teamColor`: Resets the teamColor option to default value.
+- `/reset enemyColor`: Resets the enemyColor option to default value.
 
 ### How To Use
 
 In order for the mod to work properly, your team's members must have also added you to their team otherwise they'll be able to attack you and you'll be unable to.
-So, say you get your 3 friends in your lobby to play. You're A and your friends are B, C & D.
+So, say you get your 3 friends in your lobby to play. Say you're A and your friends are B, C & D.
 Type `/scouter` to see which player corresponds to which color. If you wanna team up with C and their color is red, you'd type `/team add red`. Then, if you're yellow, C will also have to type `/team add yellow`. Now, congratulations, you and C are officially a team. B & D will have to do the same thing with each other. If they do that, you'll now have a functioning 2v2 lobby.
 Now, start the fight! :)
 
@@ -63,6 +71,20 @@ Now, start the fight! :)
 7. Go to `BepInEx > Plugins`.
 8. In this place, put the **.dll file** from the **zip file**. Either by manually dragging it there or extracting the zip file.
 9. You're ready, start the game and enjoy!
+
+### Config File
+To access the configuration file, go to your steam games then right click stick fight and click `Managed > Browse Local Files`. Now, click `BepInEx > config`. There should be a file named `cub.plugins.TMOD.cfg`.
+There, you can change the mod's configuration settings (Just like you'd do with the commands mentioned above). Any modifications of this file are only applied when you start the game, so you can't modify it while in-game.
+Here's an example of a setting to configure:
+```
+## When 'true' your team's members will share the same custom color (TeamColor). When 'false' your team members will have the default colors of the game. (Yellow/Red/Blue/Green)
+# Setting type: Boolean
+# Default value: true
+useTeamColor = true
+```
+If you wanted to disable team colors, you'd need to turn `useTeamColor = true` to `useTeamColor = false`. Then save the file and run the game.
+
+Don't change the default values, the `/reset` commands use them to reset your settings.
 
 ### Known Issues
 
