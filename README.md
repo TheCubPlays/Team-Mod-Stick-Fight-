@@ -6,9 +6,9 @@ Ever wanted to play **team-modes**, like **2v2,** with your friends in **Stick F
 
 + <ins>Teams</ins> - There's currently **2** teams, **your team** & the **enemy team**. By default everyone's in the enemy team until added to yours.
 
-+ <ins>Shared Wins</ins> - Teams **share wins** (Configurable). There's **2 win counters**, one for each team, your win counter's side matches your in-game spawn side. So if you spawn as **Yellow** or **Red**, your win counter will be displayed **on the left**.
++ <ins>Shared Wins</ins> - Team members **share wins** (Configurable). There's **2 win counters**, one for each team, your win counter's side matches your in-game spawn side. So if you spawn as **Yellow** or **Red**, your win counter will be displayed **on the left**.
 
-+ <ins>Shared Colors</ins> - Teams **share colors** (Configurable). By default, your team's members are **blue** while the enemies are **red** (Configurable).
++ <ins>Shared Colors</ins> - Team members **share colors** (Configurable). By default, your team's members are **blue** while the enemies are **red** (Configurable).
 
 + <ins>FriendlyFire Disabled</ins> - **You can't hurt** your team's members. However, **they can hurt you** unless they've **also** added you to their team. (It was made this way to prevent abuse of the mod for cheating purposes).
 
@@ -33,11 +33,11 @@ All commands are <ins>case insensitive</ins> (So "/prefix" = "/pReFiX")
 - `/prefix`: Shows the **prefix** used for **commands** (By default '/').
 - `/prefix <Prefix>`: Configure the prefix used for commands **(Must be a character)**
 - `/teamWinsToggle`: Shows the current option for **teamWinsToggle** (True/False).
-- `/teamWinsToggle <True/False>`: When **true**, team members` wins will be **merged to one** (Visually, not actually).
+- `/teamWinsToggle <True/False>`: When **true**, team member' wins will be **merged to one** (Visually, not actually).
 - `/useTeamColor`: Shows the current option for **useTeamColor** (True/False).
 - `/useTeamColor <True/False>`: When **true**, you & your team's members will **share** your team's custom color **(If useColors is also set to true)**. When **false**, you'll have the game's default colors.
 - `/useEnemyColor`: Shows the current option for **useEnemyColor** (True/False).
-- `/useEnemyColor <True/False>`: When **true**, enemy team members` will **share** their team's custom color **(If useColors is also set to true)**. When **false**, they'll have the game's default colors.
+- `/useEnemyColor <True/False>`: When **true**, enemy team members' will **share** their team's custom color **(If useColors is also set to true)**. When **false**, they'll have the game's default colors.
 - `/useColors`: Shows the current option for **useColors** (True/False).
 - `/useColors <True/False>`: When **true**, all team members` will **share** their team's custom color **(If the corresponding useTeamColor/useEnemyColor options are also true)**. When **false**, they'll have the game's default colors (Regardless of the other 2 options).
 - `/teamColor`: Shows the hex color code of your team's color.
