@@ -74,7 +74,7 @@ Now, start the fight! :)
 - The command auto-complete doesn't work with parameters yet.
 
 ### Credits
-[Monky](https://github.com/Mn0ky)'s source code was very helpful in the making of this mod, particularly regarding custom colors and chat commands. The source code used was from their amazing QOL Mod which you should also check out: https://github.com/Mn0ky/QOL-Mod/tree/master?tab=readme-ov-file#installation
+[Monky](https://github.com/Mn0ky)'s source code was very helpful in the making of this mod, particularly regarding custom colors, chat commands and overall fundamentals for modding this crappy game. The source code used was from their amazing QOL Mod which you should also check out: https://github.com/Mn0ky/QOL-Mod/tree/master?tab=readme-ov-file#installation
 
 <ins>Note: Monky's QOL Mod is currently not compatible with this mod.</ins>
 
