@@ -1,6 +1,6 @@
 <img width="250" height="250" alt="warning" src="https://github.com/user-attachments/assets/f7f47c4a-223a-4787-859d-74ed6f7f4359"/>
 
-### About This Mod
+## About This Mod
 
 Ever wanted to play **team-modes**, like **2v2,** with your friends in **Stick Fight**? Until now, we had to _act_ like it's a 2v2 by trying not to hit our teammate; But no more! Now, **as long as both you and your friends have this mod installed**, you can experience REAL 2v2 stick fight!
 
