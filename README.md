@@ -2,6 +2,8 @@
 
 Ever wanted to play **team-modes**, like **2v2,** with your friends in **Stick Fight**? Until now, we had to _act_ like it's a 2v2 by trying not to hit our teammate; But no more! Now, **as long as both you and your friends have this mod installed**, you can experience REAL 2v2 stick fight!
 
+<ins>Note:</ins> Monky's QOL Mod is currently not compatible with this mod.
+
 ## Features
 
 + <ins>Teams</ins> - There's currently **2** teams, **your team** & the **enemy team**. By default everyone's in the enemy team until added to yours.
@@ -109,5 +111,3 @@ Don't change the default values, the `/reset` commands use them to reset your se
 Parts of this code are adapted from their amazing [QOL Mod](https://github.com/Mn0ky/QOL-Mod) and are used under the [GNU Lesser General Public License v3.0](https://www.gnu.org/licenses/lgpl-3.0.html).
 
 This project as a whole is licensed under the LGPL v3.0. See the [LICENSE](LICENSE) file for details.
-
-<ins>Note:</ins> Monky's QOL Mod is currently not compatible with this mod.
