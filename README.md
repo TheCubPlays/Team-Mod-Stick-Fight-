@@ -103,6 +103,7 @@ Don't change the default values, the `/reset` commands use them to reset your se
 - **Ice gun** won't damage or slow down your teammates, however it will still give them the ice particle making it look like it'll slow them down even though it won't.
 - **Thrusters** will still hurt your teammates with fire.
 - Sometimes, the custom colors can have weird bugs. Not sure what causes that yet, the bug itself is very inconsistent. It has a chance to occur when you change the player colors in-game. However I don't think this will happen often. When it happens, you have to rejoin the lobby.
+- If you block your teammate's bullet, it'll damage them if it hits them.
 - The command auto-complete doesn't work with parameters yet.
 
 ## Credits & License Notice
