@@ -1,5 +1,7 @@
 using UnityEngine;
 
+namespace TMOD;
+
 // Gets a string hex code and turns it into a unityengine color
 public static class ColorUtils
 {
