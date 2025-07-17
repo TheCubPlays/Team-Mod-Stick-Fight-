@@ -1,4 +1,4 @@
-<img width="250" height="250" alt="warning" src="https://github.com/user-attachments/assets/f7f47c4a-223a-4787-859d-74ed6f7f4359"/>
+### <ins>NOW COMPATIBLE WITH MONKY'S QOL MOD!</ins>
 
 ## About This Mod
 
@@ -55,11 +55,16 @@ All commands are <ins>case insensitive</ins> (So "/prefix" = "/pReFiX")
 - `/reset teamColor`: Resets the teamColor option to default value.
 - `/reset enemyColor`: Resets the enemyColor option to default value.
 
+**QOL Compatibility Commands (Must have [QOL Mod](https://github.com/Mn0ky/QOL-Mod) installed)**
+
+- `/useQolColors [true/false]`: When **true**, the QOL Mod's color functionality will completely replace the Team Mod's functionality. This means that all team color configuration options are ignored and they will not affect the game. By default it's **false**.
+
 ### <ins> Notes </ins>
 
 - Your team's win counter won't necessarily have the same colour as your stickman, it has the team's colour. This means that if `useColors` is false (which means custom colors are disabled), your team's win counter will still have the team's colour regardless of you having default colors.
 - If the last players standing are of the same team, the round won't end. That's mainly because if that was a thing, the mod could be used as a cheat client.
 - There's no limit to the amount of teammates you can have. It could be a 4v0, 3v1, 2v2, 2v1 and 1v1.
+- There's command compatibility for the **QOL Mod**, so you can have both mods use the same command prefix fluently! The autocomplete will work as well. Also if you do install the QOL Mod, regardless of whether `/useQolColors` is set to **true** or **false**, the game's default colors will match QOL Mod's default colors. For example: If enemy colors are disabled, instead of using the game's default spawn colors (which is what would normally happen if you didn't have the QOL Mod installed), the colors that will be used for the enemy team are QOL Mod's default colors (Which implies you can configure them in `monky.plugins.QOL.cfg` and set them to whatever color you'd like!)
 
 ## How To Use
 
@@ -106,6 +111,7 @@ Don't change the default values, the `/reset` commands use them to reset your se
 - Sometimes, the custom colors can have weird bugs. Not sure what causes that yet, the bug itself is very inconsistent. It has a chance to occur when you change the player colors in-game. However I don't think this will happen often. When it happens, you have to rejoin the lobby.
 - If you block your teammate's bullet, it'll damage them if it hits them.
 - The command auto-complete doesn't work with parameters yet.
+- (Only if you install the [QOL Mod](https://github.com/Mn0ky/QOL-Mod) as well) QOL Mod's versions up to **v1.18.0** have a bug that will affect this mod as well: **After a certain arrow sequence when using the chatbox, your message will be sent when you press "escape" even when you don't want it to.** This was fixed in **v1.18.2** but I don't think that release is currently available to people.
 
 ## Credits & License Notice
 
