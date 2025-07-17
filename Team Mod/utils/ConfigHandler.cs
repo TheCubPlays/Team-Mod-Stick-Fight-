@@ -32,18 +32,22 @@ public static class ConfigHandler
             "teamWinsToggle",
             true,
             "When 'true' your team and the enemy team will each have their own win counters, calculated as the sum of all team members' individual wins. Set to false to disable.");
+        var useQolColorsToggleEntry = config.Bind(PlayerColorSect,
+            "useQolColors",
+            false,
+            "When 'true', IF you have the QOL Mod installed, this mod's color functionality is replaced by the QOL Mod's colors. This means that regardless of the options below, there will be no team/enemy colours.");
         var customTeamColorToggleEntry = config.Bind(PlayerColorSect,
             "useTeamColor",
             true,
-            "When 'true' your team's members will share the same custom color (TeamColor). When 'false' your team members will have the default colors of the game. (Yellow/Red/Blue/Green)");
+            "When 'true' your team's members will share the same custom color (TeamColor). When 'false' your team members will have the default colors of the game. (Yellow/Red/Blue/Green unless you have the QOL Mod installed and changed default player colors)");
         var customEnemyColorToggleEntry = config.Bind(PlayerColorSect,
             "useEnemyColor",
             true,
-            "When 'true' the enemy team's members will share the same custom color (EnemyColor). When 'false' the enemy team members will have the default colors of the game. (Yellow/Red/Blue/Green)");
+            "When 'true' the enemy team's members will share the same custom color (EnemyColor). When 'false' the enemy team members will have the default colors of the game. (Yellow/Red/Blue/Green unless you have the QOL Mod installed and changed default player colors)");
         var customAllColorToggleEntry = config.Bind(PlayerColorSect,
             "useColors",
             true,
-            "When 'false' all stick figures will have default colors (Yellow/Red/Blue/Green) regardless of the 2 options above. When 'true', it depends on the other 2 options. Note that this doesn't affect the win counter color, that one will still use the custom team colors from below.");
+            "When 'false' all stick figures will have default colors (Yellow/Red/Blue/Green unless you have the QOL Mod installed and changed default player colors) regardless of the 2 options above. When 'true', it depends on the other 2 options. Note that this doesn't affect the win counter color, that one will still use the custom team colors from below.");
         var teamColorEntry = config.Bind(PlayerColorSect,
             "TeamColor",
             new Color(0, 0, 1),
@@ -79,7 +83,10 @@ public static class ConfigHandler
                         {
                             otherColor = Helper.getRGBFromColor(Helper.GetColorFromID(player.NetworkSpawnID));
                         }
-                        MultiplayerManagerPatches.ChangeAllCharacterColors(otherColor, otherCharacter);
+                        if (!Helper.useQolColorsToggle || !Plugin.isQolEnabled)
+                        {
+                            MultiplayerManagerPatches.ChangeAllCharacterColors(otherColor, otherCharacter);
+                        }
                     }
                 }
                 else
@@ -90,7 +97,10 @@ public static class ConfigHandler
                     {
                         color = Helper.getRGBFromColor(Helper.GetColorFromID(player.NetworkSpawnID));
                     }
-                    MultiplayerManagerPatches.ChangeAllCharacterColors(color, character);
+                    if (!Helper.useQolColorsToggle || !Plugin.isQolEnabled)
+                    {
+                        MultiplayerManagerPatches.ChangeAllCharacterColors(color, character);                
+                    }
                 }
             }
             // We update win counters
@@ -119,7 +129,10 @@ public static class ConfigHandler
                         {
                             otherColor = Helper.getRGBFromColor(Helper.GetColorFromID(player.NetworkSpawnID));
                         }
-                        MultiplayerManagerPatches.ChangeAllCharacterColors(otherColor, otherCharacter);
+                        if (!Helper.useQolColorsToggle || !Plugin.isQolEnabled)
+                        {
+                            MultiplayerManagerPatches.ChangeAllCharacterColors(otherColor, otherCharacter);
+                        }
                     }
                 }
             } 
@@ -135,6 +148,8 @@ public static class ConfigHandler
 
         var teamWinsToggleEntryKey = teamWinsToggleEntry.Definition.Key;
         EntriesDict[teamWinsToggleEntryKey] = teamWinsToggleEntry;
+        var useQolColorsToggleEntryKey = useQolColorsToggleEntry.Definition.Key;
+        EntriesDict[useQolColorsToggleEntryKey] = useQolColorsToggleEntry;
         var customTeamColorToggleEntryKey = customTeamColorToggleEntry.Definition.Key;
         EntriesDict[customTeamColorToggleEntryKey] = customTeamColorToggleEntry;
         var customEnemyColorToggleEntryKey = customEnemyColorToggleEntry.Definition.Key;
@@ -163,6 +178,124 @@ public static class ConfigHandler
                 Helper.InitWinText(winCounterUI);
             }
         };
+        useQolColorsToggleEntry.SettingChanged += (_, _) =>
+        {
+            Helper.useQolColorsToggle = useQolColorsToggleEntry.Value;
+            if (Plugin.isQolEnabled)
+            {
+                if (useQolColorsToggleEntry.Value)
+                {
+                    foreach (var player in UnityEngine.Object.FindObjectsOfType<NetworkPlayer>())
+                    {
+                        if (player.NetworkSpawnID != GameManager.Instance.mMultiplayerManager.LocalPlayerIndex)
+                        {
+                            var character = player.transform.root.gameObject;
+                            Color player_color = QOLConfigHandler.getColor(player.NetworkSpawnID);
+
+                            MultiplayerManagerPatches.ChangeAllCharacterColors(player_color, character);
+                        }
+                        else
+                        {
+                            var character = player.transform.root.gameObject;
+                            // If QOL's custom color is enabled, the local player will get their custom color. Otherwise, they'll get their spawn color.
+                            Color player_color = QOLConfigHandler.isCustomColor() ? QOLConfigHandler.GetCustomColor() : QOLConfigHandler.getColor(player.NetworkSpawnID);
+
+                            MultiplayerManagerPatches.ChangeAllCharacterColors(player_color, character);
+                        }
+                    }
+                    // We update win counters
+                    var winCounterUI = UnityEngine.Object.FindObjectOfType<WinCounterUI>();
+                    if (winCounterUI != null)
+                    {
+                        Helper.InitWinText(winCounterUI);
+                    }
+                }
+                else
+                {
+                    // Similar stuff to what we did on the OnPlayerSpawnMethodPostfix in MultiplayerManagerPatches.cs, you can check that if you need help understanding.
+                    Helper.customAllColorToggle = customAllColorToggleEntry.Value;
+
+                    var customTeamColor = GetEntry<Color>("TeamColor");
+                    var isCustomTeamColor = customTeamColor != GetEntry<Color>("TeamColor", true);
+
+                    var team_color = isCustomTeamColor ? customTeamColor : new Color(0f, 0f, 1f, 1f);
+                    var customEnemyColor = GetEntry<Color>("EnemyColor");
+                    var isCustomEnemyColor = customEnemyColor != GetEntry<Color>("EnemyColor", true);
+
+                    var enemy_color = isCustomEnemyColor ? customEnemyColor : new Color(1f, 0f, 0f, 1f);
+                    foreach (var player in UnityEngine.Object.FindObjectsOfType<NetworkPlayer>())
+                    {
+                        if (player.NetworkSpawnID != GameManager.Instance.mMultiplayerManager.LocalPlayerIndex)
+                        {
+                            var otherCharacter = player.transform.root.gameObject;
+                            Color otherColor = team_color;
+                            if (!ChatCommands.Teammates.Contains(Helper.GetColorFromID(player.NetworkSpawnID).ToLower()))
+                            {
+                                if (Helper.customEnemyColorToggle && Helper.customAllColorToggle)
+                                {
+                                    otherColor = enemy_color;
+                                }
+                                else
+                                {
+                                    if (!Plugin.isQolEnabled)
+                                    {
+                                        otherColor = Helper.getRGBFromColor(Helper.GetColorFromID(player.NetworkSpawnID));
+                                    }
+                                    else
+                                    {
+                                        otherColor = QOLConfigHandler.getColor(player.NetworkSpawnID);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (!(Helper.customTeamColorToggle && Helper.customAllColorToggle))
+                                {
+                                    if (!Plugin.isQolEnabled)
+                                    {
+                                        otherColor = Helper.getRGBFromColor(Helper.GetColorFromID(player.NetworkSpawnID));
+                                    }
+                                    else
+                                    {
+                                        otherColor = QOLConfigHandler.getColor(player.NetworkSpawnID);
+                                    }
+                                }
+                            }
+                            if (!Helper.useQolColorsToggle || !Plugin.isQolEnabled)
+                            {
+                                MultiplayerManagerPatches.ChangeAllCharacterColors(otherColor, otherCharacter);
+                            }
+                        }
+                        else
+                        {
+                            var character = player.transform.root.gameObject;
+                            Color color = team_color;
+                            if (!(Helper.customTeamColorToggle && Helper.customAllColorToggle))
+                            {
+                                if (!Plugin.isQolEnabled)
+                                {
+                                    color = Helper.getRGBFromColor(Helper.GetColorFromID(player.NetworkSpawnID));
+                                }
+                                else
+                                {
+                                    color = QOLConfigHandler.isCustomColor() ? QOLConfigHandler.GetCustomColor() : QOLConfigHandler.getColor(player.NetworkSpawnID);
+                                }
+                            }
+                            if (!Helper.useQolColorsToggle || !Plugin.isQolEnabled)
+                            {
+                                MultiplayerManagerPatches.ChangeAllCharacterColors(color, character);
+                            }
+                        }
+                    }
+                    // We update win counters
+                    var winCounterUI = UnityEngine.Object.FindObjectOfType<WinCounterUI>();
+                    if (winCounterUI != null)
+                    {
+                        Helper.InitWinText(winCounterUI);
+                    }
+                }              
+            }
+        };
         customTeamColorToggleEntry.SettingChanged += (_, _) =>
         {
             // Similar stuff to what we did on the OnPlayerSpawnMethodPostfix in MultiplayerManagerPatches.cs, you can check that if you need help understanding.
@@ -181,9 +314,19 @@ public static class ConfigHandler
                     {
                         if (!(Helper.customTeamColorToggle && Helper.customAllColorToggle))
                         {
-                            otherColor = Helper.getRGBFromColor(Helper.GetColorFromID(player.NetworkSpawnID));
+                            if (!Plugin.isQolEnabled)
+                            {
+                                otherColor = Helper.getRGBFromColor(Helper.GetColorFromID(player.NetworkSpawnID));
+                            }
+                            else
+                            {
+                                otherColor = QOLConfigHandler.getColor(player.NetworkSpawnID);
+                            }
                         }
-                        MultiplayerManagerPatches.ChangeAllCharacterColors(otherColor, otherCharacter);
+                        if (!Helper.useQolColorsToggle || !Plugin.isQolEnabled)
+                        {
+                            MultiplayerManagerPatches.ChangeAllCharacterColors(otherColor, otherCharacter);
+                        }
                     }
                 }
                 else
@@ -192,9 +335,19 @@ public static class ConfigHandler
                     Color color = team_color;
                     if (!(Helper.customTeamColorToggle && Helper.customAllColorToggle))
                     {
-                        color = Helper.getRGBFromColor(Helper.GetColorFromID(player.NetworkSpawnID));
+                        if (!Plugin.isQolEnabled)
+                        {
+                            color = Helper.getRGBFromColor(Helper.GetColorFromID(player.NetworkSpawnID));
+                        }
+                        else
+                        {
+                            color = QOLConfigHandler.isCustomColor() ? QOLConfigHandler.GetCustomColor() : QOLConfigHandler.getColor(player.NetworkSpawnID); 
+                        }
                     }
-                    MultiplayerManagerPatches.ChangeAllCharacterColors(color, character);
+                    if (!Helper.useQolColorsToggle || !Plugin.isQolEnabled)
+                    {
+                        MultiplayerManagerPatches.ChangeAllCharacterColors(color, character);
+                    }
                 }
             }
             // We update win counters
@@ -222,9 +375,19 @@ public static class ConfigHandler
                     {
                         if (!(Helper.customEnemyColorToggle && Helper.customAllColorToggle))
                         {
-                            otherColor = Helper.getRGBFromColor(Helper.GetColorFromID(player.NetworkSpawnID));
+                            if (!Plugin.isQolEnabled)
+                            {
+                                otherColor = Helper.getRGBFromColor(Helper.GetColorFromID(player.NetworkSpawnID));
+                            }
+                            else
+                            {
+                                otherColor = QOLConfigHandler.getColor(player.NetworkSpawnID);
+                            }
                         }
-                        MultiplayerManagerPatches.ChangeAllCharacterColors(otherColor, otherCharacter);
+                        if (!Helper.useQolColorsToggle || !Plugin.isQolEnabled)
+                        {
+                            MultiplayerManagerPatches.ChangeAllCharacterColors(otherColor, otherCharacter);
+                        }
                     }
                 } // We're not doing anything for ourselves (local player) since we can't be on the enemy-side so, this doesn't affect us.
             } 
@@ -262,18 +425,34 @@ public static class ConfigHandler
                         }
                         else
                         {
-                            otherColor = Helper.getRGBFromColor(Helper.GetColorFromID(player.NetworkSpawnID));
+                            if (!Plugin.isQolEnabled)
+                            {
+                                otherColor = Helper.getRGBFromColor(Helper.GetColorFromID(player.NetworkSpawnID));
+                            }
+                            else
+                            {
+                                otherColor = QOLConfigHandler.getColor(player.NetworkSpawnID);
+                            }
                         }
                     }
                     else
                     {
                         if (!(Helper.customTeamColorToggle && Helper.customAllColorToggle))
                         {
-                            otherColor = Helper.getRGBFromColor(Helper.GetColorFromID(player.NetworkSpawnID));
+                            if (!Plugin.isQolEnabled)
+                            {
+                                otherColor = Helper.getRGBFromColor(Helper.GetColorFromID(player.NetworkSpawnID));
+                            }
+                            else
+                            {
+                                otherColor = QOLConfigHandler.getColor(player.NetworkSpawnID);
+                            }
                         }
                     }
-
-                    MultiplayerManagerPatches.ChangeAllCharacterColors(otherColor, otherCharacter);
+                    if (!Helper.useQolColorsToggle || !Plugin.isQolEnabled)
+                    {
+                        MultiplayerManagerPatches.ChangeAllCharacterColors(otherColor, otherCharacter);
+                    }
                 }
                 else
                 {
@@ -281,9 +460,19 @@ public static class ConfigHandler
                     Color color = team_color;
                     if (!(Helper.customTeamColorToggle && Helper.customAllColorToggle))
                     {
-                        color = Helper.getRGBFromColor(Helper.GetColorFromID(player.NetworkSpawnID));
+                        if (!Plugin.isQolEnabled)
+                        {
+                            color = Helper.getRGBFromColor(Helper.GetColorFromID(player.NetworkSpawnID));
+                        }
+                        else
+                        {
+                            color = QOLConfigHandler.isCustomColor() ? QOLConfigHandler.GetCustomColor() : QOLConfigHandler.getColor(player.NetworkSpawnID);
+                        }
                     }
-                    MultiplayerManagerPatches.ChangeAllCharacterColors(color, character);
+                    if (!Helper.useQolColorsToggle || !Plugin.isQolEnabled)
+                    {
+                        MultiplayerManagerPatches.ChangeAllCharacterColors(color, character);
+                    }
                 }
             }
             // We update win counters
@@ -320,5 +509,6 @@ public static class ConfigHandler
         ResetEntry("useColors");
         ResetEntry("TeamColor");
         ResetEntry("EnemyColor");
+        ResetEntry("useQolColors");
     }
 }
