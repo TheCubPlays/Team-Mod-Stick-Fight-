@@ -1,4 +1,4 @@
-// Credits to Monky for half of this, I mean I basically only made everything inside OnPlayerSpawnedMethodPostfix
+// Credits to Monky for the colour functions below. Since V1.2.1, OnPlayerSpawnedMethodPrefix's functionality was moved to Helper.cs. Now the method runs with a 1 second delay so that it overrides QOL Mod's behavior if needed.
 
 using System.Linq;
 using HarmonyLib;
@@ -16,62 +16,16 @@ class MultiplayerManagerPatches
         var onPlayerSpawnedMethod = AccessTools.Method(typeof(MultiplayerManager), "OnPlayerSpawned");
 
         var onPlayerSpawnedMethodPostfix = new HarmonyMethod(typeof(MultiplayerManagerPatches)
-            .GetMethod(nameof(OnPlayerSpawnedMethodPostfix)));
+            .GetMethod(nameof(OnPlayerSpawnedMethodPostfix)))
+        {
+            priority = Priority.Last
+        };
         harmonyInstance.Patch(onPlayerSpawnedMethod, postfix: onPlayerSpawnedMethodPostfix);
-    }
 
+    }
     public static void OnPlayerSpawnedMethodPostfix(MultiplayerManager __instance)
     {
-        var customTeamColor = ConfigHandler.GetEntry<Color>("TeamColor");
-        var isCustomTeamColor = customTeamColor != ConfigHandler.GetEntry<Color>("TeamColor", true);
-            
-        var team_color = isCustomTeamColor ? customTeamColor : new Color(0f, 0f, 1f, 1f);
-        var customEnemyColor = ConfigHandler.GetEntry<Color>("EnemyColor");
-        var isCustomEnemyColor = customEnemyColor != ConfigHandler.GetEntry<Color>("EnemyColor", true);
-            
-        var enemy_color = isCustomEnemyColor ? customEnemyColor : new Color(1f, 0f, 0f, 1f);
-
-        foreach (var player in Object.FindObjectsOfType<NetworkPlayer>())
-        {
-            if (player.NetworkSpawnID != __instance.LocalPlayerIndex)
-            {
-                // Modifies other players
-                var otherCharacter = player.transform.root.gameObject;
-                // It starts by assuming the player is our teammate.
-                Color otherColor = team_color;
-                // If team colors are disabled, it gives otherColor the default color (Corresponding to the player's spawn ID).
-                if (!(Helper.customTeamColorToggle && Helper.customAllColorToggle))
-                {
-                    otherColor = Helper.getRGBFromColor(Helper.GetColorFromID(player.NetworkSpawnID));
-                }
-                // If the player turns out not to be our teammate, it gives otherColor the enemy color.
-                if (!ChatCommands.Teammates.Contains(Helper.GetColorFromID(player.NetworkSpawnID).ToLower()))
-                {
-                    // If enemy colors are disabled, it gives otherColor the default color.
-                    if (Helper.customEnemyColorToggle && Helper.customAllColorToggle)
-                    {
-                        otherColor = enemy_color;
-                    }
-                    else
-                    {
-                        otherColor = Helper.getRGBFromColor(Helper.GetColorFromID(player.NetworkSpawnID));
-                    }
-                }
-
-                ChangeAllCharacterColors(otherColor, otherCharacter);
-            }
-            else
-            {
-                // Modifies us
-                var character = player.transform.root.gameObject;
-                // If team colors are enabled, make the team color our character's default color.
-                if (!(Helper.customTeamColorToggle && Helper.customAllColorToggle))
-                {
-                    team_color = Helper.getRGBFromColor(Helper.GetColorFromID(player.NetworkSpawnID));
-                }
-                ChangeAllCharacterColors(team_color, character);
-            }
-        }
+        Helper.Instance.StartCoroutine(Helper.DelayedColorUpdate(__instance));
     }
 
     public static void ChangeSpriteRendColor(Color colorWanted, GameObject character)
