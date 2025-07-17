@@ -57,6 +57,7 @@ All commands are <ins>case insensitive</ins> (So "/prefix" = "/pReFiX")
 
 **QOL Compatibility Commands (Must have [QOL Mod](https://github.com/Mn0ky/QOL-Mod) installed)**
 
+- `/useQolColors`: Shows the current option for **useQolColors** (True/False).
 - `/useQolColors [true/false]`: When **true**, the QOL Mod's color functionality will completely replace the Team Mod's functionality. This means that all team color configuration options are ignored and they will not affect the game. By default it's **false**.
 
 ### <ins> Notes </ins>
