@@ -1,6 +1,6 @@
 /* Credits to Monky for InitModText, though the rest was also inspired by him.
-Monky's files: Commands.cs, ChatManagerPatches.cs, Helper.cs (Mostly), HSBColor.cs, PlayerUtils.cs
-My files: ChatCommands.cs, CharacterInformationPatch.cs, FightingPatch.cs, OnLeavePatch.cs, WinTextPatch.cs, ConfigHandler.cs (Mostly), ModLogger.cs
+Monky's files: Commands.cs, ChatManagerPatches.cs, Helper.cs (Mostly), PlayerUtils.cs
+My files: ChatCommands.cs, CharacterInformationPatch.cs, FightingPatch.cs, OnLeavePatch.cs, WinTextPatch.cs, ConfigHandler.cs (Mostly), ColorUtils.cs, QOLConfigHandler.cs, ModLogger.cs
 Monky's files that were modified a good bit by me: MultiplayerManagerPaches.cs, Plugin.cs
 
 Note: I only grabbed what was essential from Monky's files (QOL Mod), so don't assume that's all he made in those. I also cut certain parts from some methods.
@@ -9,11 +9,14 @@ Monky: https://github.com/Mn0ky
 */
 
 using System;
+using System.Collections;
 using BepInEx;
 using HarmonyLib;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using BepInEx.Bootstrap;
+
 
 namespace TMOD;
 
@@ -22,13 +25,35 @@ namespace TMOD;
 
 public class Plugin : BaseUnityPlugin
 {
+    /*
+    QOL Mod Compatibility
+
+    Checking if the QOL Mod is being used
+    */
+    public static bool isQolEnabled = false;
+    public static bool IsQOLModLoaded()
+    {
+        string qolModGUID = "monky.plugins.QOL";
+
+        return Chainloader.PluginInfos.ContainsKey(qolModGUID);
+    }
     private void Awake()
     {
-        // Runs when the plugin starts
+        StartCoroutine(DelayedStart());
+    }
+
+    private IEnumerator DelayedStart()
+    {
+        yield return new WaitForSeconds(0.2f); // Wait for 1 second – tweak as needed
+        if (IsQOLModLoaded())
+        {
+            isQolEnabled = true;
+        }
         Logger.LogInfo("Plugin " + Guid + " is loaded! [v" + VersionNumber + "]");
+
         try
         {
-            Harmony harmony = new("cub.TMOD"); // Creates harmony instance with identifier
+            Harmony harmony = new("cub.TMOD");
             Logger.LogInfo("Applying ChatManager patch...");
             ChatManagerPatches.Patches(harmony);
             Logger.LogInfo("Applying Fighting patch...");
@@ -46,7 +71,9 @@ public class Plugin : BaseUnityPlugin
         {
             Logger.LogError("Exception on applying patches: " + ex.InnerException);
         }
+
         InitModText();
+
         try
         {
             Logger.LogInfo("Loading configuration options from config file...");
@@ -57,7 +84,6 @@ public class Plugin : BaseUnityPlugin
             Logger.LogError("Exception on loading configuration: " + ex.StackTrace + ex.Message + ex.Source +
                             ex.InnerException);
         }
-
     }
     public static void InitModText()
     {
@@ -69,8 +95,14 @@ public class Plugin : BaseUnityPlugin
         canvas.renderMode = RenderMode.ScreenSpaceOverlay;
         canvasScaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
         canvasScaler.referenceResolution = new Vector2(1920, 1080);
-
-        modTextTMP.text = "<color=green>Cub's Team Mod</color> " + "<color=orange>v" + VersionNumber;
+        if (isQolEnabled)
+        {
+            modTextTMP.text = "<color=green>Cub's Team Mod</color> " + "<color=orange>v" + VersionNumber + " <color=white>&</color> " + "<color=#FFFFFF00>                                         .</color>";
+        }
+        else
+        {
+            modTextTMP.text = "<color=green>Cub's Team Mod</color> " + "<color=orange>v" + VersionNumber;
+        }
 
         modTextTMP.fontSizeMax = 25;
         modTextTMP.fontSize = 25;
@@ -78,8 +110,9 @@ public class Plugin : BaseUnityPlugin
         modTextTMP.color = Color.red;
         modTextTMP.fontStyle = FontStyles.Bold;
         modTextTMP.alignment = TextAlignmentOptions.TopRight;
-        modTextTMP.richText = true;
+        modTextTMP.richText = true; 
     }
-    public const string VersionNumber = "1.1.1"; // Version number
+    public const string VersionNumber = "1.2.1"; // Version number
     public const string Guid = "cub.plugins.TMOD"; 
+
 }
