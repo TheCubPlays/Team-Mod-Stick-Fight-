@@ -32,6 +32,7 @@ public static class ChatCommands
         new Command("usecolors", useColors, 0, true),
         new Command("teamcolor", TeamColor, 0, true),
         new Command("enemycolor", EnemyColor, 0, true),
+        new Command("useqolcolors", useQolColors, 0, true),
         new Command("scouter", Scouter, 0, true)
     };
     // Used to assign members to a team, remove them and also list them.
@@ -57,7 +58,7 @@ public static class ChatCommands
                 {
                     Teammates.Remove(teammate.ToLower());
                     // The local ID always represents OUR ID (In-game spawn ID)
-                    var local_ID = GameManager.Instance.mMultiplayerManager.LocalPlayerIndex;  
+                    var local_ID = GameManager.Instance.mMultiplayerManager.LocalPlayerIndex;
                     var player = Helper.GetNetworkPlayer(Helper.GetIDFromColor(teammate.ToLower()));
                     var character = player.transform.root.gameObject; // The targeted player's character
                     // If no custom colour was set up, the default one will be used.
@@ -69,7 +70,10 @@ public static class ChatCommands
                     {
                         enemy_color = Helper.getRGBFromColor(teammate.ToLower());
                     }
-                    MultiplayerManagerPatches.ChangeAllCharacterColors(enemy_color, character);
+                    if (!Helper.useQolColorsToggle)
+                    {
+                        MultiplayerManagerPatches.ChangeAllCharacterColors(enemy_color, character);
+                    }
                     // When doing anything like this, we always update the win counter.
                     var winCounterUI = Object.FindObjectOfType<WinCounterUI>();
                     // We create an instance of WinCounterUI, it's how we gain access to the class's methods.
@@ -115,7 +119,10 @@ public static class ChatCommands
                                 {
                                     team_color = Helper.getRGBFromColor(args[1].ToLower());
                                 }
-                                MultiplayerManagerPatches.ChangeAllCharacterColors(team_color, character);
+                                if (!Helper.useQolColorsToggle)
+                                {
+                                    MultiplayerManagerPatches.ChangeAllCharacterColors(team_color, character);
+                                }
                                 var winCounterUI = Object.FindObjectOfType<WinCounterUI>();
                                 if (winCounterUI != null)
                                 {
@@ -167,7 +174,10 @@ public static class ChatCommands
                             {
                                 enemy_color = Helper.getRGBFromColor(args[1].ToLower());
                             }
-                            MultiplayerManagerPatches.ChangeAllCharacterColors(enemy_color, character);
+                            if (!Helper.useQolColorsToggle)
+                            {
+                                MultiplayerManagerPatches.ChangeAllCharacterColors(enemy_color, character);
+                            }
                             var winCounterUI = Object.FindObjectOfType<WinCounterUI>();
                             if (winCounterUI != null)
                             {
@@ -382,6 +392,32 @@ public static class ChatCommands
             }
         }
     }
+    // Whether the QOL Mod's colors should replace the Team Mod's colors or not.
+    private static void useQolColors(string[] args, Command cmd)
+    {
+        if (args.Length == 0)
+        {
+            var useQolColors = ConfigHandler.GetEntry<bool>("useQolColors");
+            Helper.SendModOutput($"useQolColors: '{useQolColors}'", Command.LogType.Info, false);
+            return;
+        }
+        else if (args.Length > 1)
+        {
+            Helper.SendModOutput("Invalid Parameters!", Command.LogType.Error, false);
+        }
+        else
+        {
+            if (bool.TryParse(args[0].ToLower(), out _))
+            {
+                ConfigHandler.ModifyEntry("useQolColors", args[0].ToLower());
+                Helper.SendModOutput($"useQolColors set to: {args[0].ToLower()}", Command.LogType.Success, false);
+            }
+            else
+            {
+                Helper.SendModOutput("Value must be 'true' or 'false'!", Command.LogType.Error, false);
+            }
+        }
+    }
     // The color the stickmen of the enemy team will have. (Unless stick fight decides to be funny)
     private static void TeamColor(string[] args, Command cmd)
     {
@@ -471,4 +507,35 @@ public static class ChatCommands
         cmd => cmd,
         StringComparer.InvariantCultureIgnoreCase);
     public static readonly List<string> CmdNames = Cmds.Select(cmd => cmd.Name).ToList();
+
+    // QOL Mod's commands, used to detect whether a command executed should use QOL Mod's functionality or not.
+    public static readonly List<string> QolCmdNames = new List<string>
+    {
+        "adv",
+        "fov",
+        "gg",
+        "help",
+        "hp",
+        "id",
+        "invite",
+        "lobhp",
+        "lobregen",
+        "lowercase",
+        "nuky",
+        "mute",
+        "ping",
+        "private",
+        "public",
+        "rainbow",
+        "rich",
+        "shrug",
+        "stat",
+        "suicide",
+        "translate",
+        "uncensor",
+        "uwu",
+        "ver",
+        "winnerhp",
+        "winstreak"
+    };
 }
