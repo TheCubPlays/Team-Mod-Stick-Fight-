@@ -4,7 +4,7 @@
     <LangVersion>10.0</LangVersion>
     <AssemblyName>Team Mod</AssemblyName>
     <Description>A mod that allows you to create teams in Stick Fight!</Description>
-    <Version>1.1.1</Version>
+    <Version>1.2.1</Version>
     <LangVersion>latest</LangVersion>
     <RootNamespace>TMOD</RootNamespace>
   </PropertyGroup>
