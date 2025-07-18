@@ -64,6 +64,7 @@ All commands are <ins>case insensitive</ins> (So "/prefix" = "/pReFiX")
 
 - Your team's win counter won't necessarily have the same colour as your stickman, it has the team's colour. This means that if `useColors` is false (which means custom colors are disabled), your team's win counter will still have the team's colour regardless of you having default colors.
 - If the last players standing are of the same team, the round won't end. That's mainly because if that was a thing, the mod could be used as a cheat client.
+- **Grenades & Spike Ball** can damage your teammates since they can damage you as well in the vanilla game.
 - There's no limit to the amount of teammates you can have. It could be a 4v0, 3v1, 2v2, 2v1 and 1v1.
 - There's command compatibility for the **QOL Mod**, so you can have both mods use the same command prefix fluently! The autocomplete will work as well. Also if you do install the QOL Mod, regardless of whether `/useQolColors` is set to **true** or **false**, the game's default colors will match QOL Mod's default colors. For example: If enemy colors are disabled, instead of using the game's default spawn colors (which is what would normally happen if you didn't have the QOL Mod installed), the colors that will be used for the enemy team are QOL Mod's default colors (Which implies you can configure them in `monky.plugins.QOL.cfg` and set them to whatever color you'd like!)
 
@@ -104,7 +105,6 @@ Don't change the default values, the `/reset` commands use them to reset your se
 
 ## Known Issues
 
-- **Grenades** can damage your teammates. However, this isn't necessarily an issue since it'd be weird if grenades didn't damage your teammates assuming they damage you in the vanilla game.
 - **Glue gun** can affect your teammates, it won't damage them but it'll still get them stuck.
 - **Ice gun** won't damage or slow down your teammates, however it will still give them the ice particle making it look like it'll slow them down even though it won't.
 - **Thrusters** will still hurt your teammates with fire.
