@@ -116,39 +116,31 @@ public class ChatManagerPatches
 
     public static bool SendChatMessageMethodPrefix(ref string message, ChatManager __instance)
     {
-        ModLogger.Log("[Send] Step 1");
         if (Input.GetKey(KeyCode.Escape))
         {
             return false;
         }
-        ModLogger.Log("[Send] Step 2");
 
         if (_backupTextList[0] != message && message.Length <= 350)
         {
             SaveForUpArrow(message);
         }
-        ModLogger.Log("[Send] Step 3");
         if (Plugin.isQolEnabled && (Command.CmdPrefix.ToString() == QOLConfigHandler.GetPrefix()))
         {
-            ModLogger.Log("[Send] Step 4");
             if (message[0] == Command.CmdPrefix || message[0].ToString() == QOLConfigHandler.GetPrefix())
             {
-                ModLogger.Log("[Send] Step 5");
                 FindAndRunCommand(message);
                 return false;
             }
         }
         else
         {
-            ModLogger.Log("[Send] Step 3.5");
             if (message[0] == Command.CmdPrefix)
             {
-                ModLogger.Log("[Send] Step 4.5");
                 FindAndRunCommand(message);
                 return false;
             }
         }
-        ModLogger.Log("[Send] Step Finale");
         return true;
     }
     private static void FindAndRunCommand(string message)
