@@ -1,7 +1,6 @@
 // Credits to Monky for like.. this entire file (Except for the QOL Mod compatibility changes as of V1.2.1)
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
@@ -117,35 +116,39 @@ public class ChatManagerPatches
 
     public static bool SendChatMessageMethodPrefix(ref string message, ChatManager __instance)
     {
-        if (string.IsNullOrEmpty(message) || Input.GetKey(KeyCode.Escape))
+        ModLogger.Log("[Send] Step 1");
+        if (Input.GetKey(KeyCode.Escape))
         {
             return false;
         }
+        ModLogger.Log("[Send] Step 2");
 
-        if (_backupTextList[0] != message && message.Length <= 350) 
+        if (_backupTextList[0] != message && message.Length <= 350)
         {
             SaveForUpArrow(message);
         }
-
+        ModLogger.Log("[Send] Step 3");
         if (Plugin.isQolEnabled && (Command.CmdPrefix.ToString() == QOLConfigHandler.GetPrefix()))
         {
+            ModLogger.Log("[Send] Step 4");
             if (message[0] == Command.CmdPrefix || message[0].ToString() == QOLConfigHandler.GetPrefix())
             {
-
+                ModLogger.Log("[Send] Step 5");
                 FindAndRunCommand(message);
                 return false;
             }
         }
         else
         {
+            ModLogger.Log("[Send] Step 3.5");
             if (message[0] == Command.CmdPrefix)
             {
-
+                ModLogger.Log("[Send] Step 4.5");
                 FindAndRunCommand(message);
                 return false;
-            }          
+            }
         }
-
+        ModLogger.Log("[Send] Step Finale");
         return true;
     }
     private static void FindAndRunCommand(string message)
@@ -157,7 +160,7 @@ public class ChatManagerPatches
         
         if (!ChatCommands.CmdDict.ContainsKey(targetCommandTyped)) // If command is not found
         {
-            if (Plugin.isQolEnabled && (Command.CmdPrefix.ToString() == QOLConfigHandler.GetPrefix()) && ChatCommands.QolCmdNames.Contains(targetCommandTyped)) // Check if it's a QOL Mod command
+            if (Plugin.isQolEnabled && (Command.CmdPrefix.ToString() == QOLConfigHandler.GetPrefix()) && QOLConfigHandler.GetCmds().Contains(targetCommandTyped)) // Check if it's a QOL Mod command
             {
                 return;
             }
@@ -184,7 +187,6 @@ public class ChatManagerPatches
 
             return;
         }
-
         if (Input.GetKeyDown(KeyCode.DownArrow) && _upArrowCounter > 0)
         {
             _upArrowCounter--;
@@ -196,7 +198,6 @@ public class ChatManagerPatches
 
             return;
         }
-
         const string rTxtFmt = "<#000000BB><u>";
         var txt = chatField.text;
         var txtLen = txt.Length;
@@ -208,19 +209,23 @@ public class ChatManagerPatches
 
         Adding QOL Mod's commands in the autocomplete as well
         */
+        if (txt == "")
+        {
+            return;
+        }
+        List<string> QolCmdNames = QOLConfigHandler.GetCmds();
         var prefix = Command.CmdPrefix.ToString();
         List<string> CmdNames_QOL = ChatCommands.CmdNames;
         if (Plugin.isQolEnabled && (Command.CmdPrefix.ToString() == QOLConfigHandler.GetPrefix())) // Both mods' commands will be autocompleted
         {
             prefix = Command.CmdPrefix.ToString();
-            CmdNames_QOL = ChatCommands.CmdNames.Concat(ChatCommands.QolCmdNames.Select(cmd => Command.CmdPrefix.ToString() + cmd)).ToList();
+            CmdNames_QOL = ChatCommands.CmdNames.Concat(QolCmdNames.Select(cmd => prefix + cmd)).ToList();
         }
         else if (Plugin.isQolEnabled && (txt[0].ToString() == QOLConfigHandler.GetPrefix())) // Only the Qol Mod's commands will be autocompleted
         {
             prefix = QOLConfigHandler.GetPrefix();
-            CmdNames_QOL = ChatCommands.QolCmdNames.Select(cmd => prefix + cmd).ToList();
+            CmdNames_QOL = QolCmdNames.Select(cmd => prefix + cmd).ToList();
         } // Otherwise, the Team Mod's commands will be autocompleted
-
         if (txtLen > 0 && txt[0].ToString() == prefix)
         {
             // Credit for this easy way of getting the closest matching string from a list
@@ -268,20 +273,26 @@ public class ChatManagerPatches
                     if (effectStartPos == -1)
                         // This will only occur if a cmd is fully typed and then more chars are added after
                         return;
-
                     chatField.text = txt.Remove(effectStartPos);
                     return;
                 }
-
                 var cmdMatch = CmdNames_QOL[cmdDetectedIndex];
-                var targetCmd = ChatCommands.CmdDict[cmdMatch.Substring(1)];
+                Dictionary<string, Command> QolCmdDict = QOLConfigHandler.GetCmds().ToDictionary(cmd => cmd, cmd => new Command(cmd, (args, self) => { }, 0, false,
+                new List<string>()),
+                StringComparer.InvariantCultureIgnoreCase);
+                Dictionary<string, Command> allDict = ChatCommands.CmdDict
+                    .Concat(QolCmdDict)
+                    .ToDictionary(
+                        pair => pair.Key,
+                        pair => pair.Value,
+                        StringComparer.InvariantCultureIgnoreCase);
+                var targetCmd = allDict[cmdMatch.Substring(1)];
                 var targetCmdParams = targetCmd.AutoParams;
-
                 if (targetCmdParams == null) return; // Cmd may not take any params
                 if (cmdAndParam.Length <= 1 || cmdAndParam[0].Length != cmdMatch.Length) return;
 
                 // Focusing on auto-completing the parameter now
-                var paramTxt = cmdAndParam![1].Replace(" ", "");
+                var paramTxt = cmdAndParam![1].Replace(" ", "");;
                 var paramTxtLen = paramTxt.Length;
 
                 //Debug.Log("paramTxt: \"" + paramTxt + "\"");
