@@ -112,7 +112,7 @@ public class Plugin : BaseUnityPlugin
         modTextTMP.alignment = TextAlignmentOptions.TopRight;
         modTextTMP.richText = true; 
     }
-    public const string VersionNumber = "1.2.1"; // Version number
+    public const string VersionNumber = "1.2.2"; // Version number
     public const string Guid = "cub.plugins.TMOD"; 
 
 }
