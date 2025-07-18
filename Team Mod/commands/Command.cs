@@ -4,6 +4,7 @@ Credits to Monky for... all of this
 
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace TMOD;
 
@@ -58,8 +59,7 @@ public class Command
         }
         catch (Exception e)
         {
-           ModLogger.Log("Exception occured when running command: " + e);
-
+           Debug.Log("Exception occured when running command: " + e);
             _currentOutputMsg = "Something went wrong!";
             Helper.SendModOutput(_currentOutputMsg, LogType.Warning, false);
             _currentOutputMsg = "";
