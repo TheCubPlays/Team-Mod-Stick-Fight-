@@ -1,4 +1,4 @@
-### <ins>NOW COMPATIBLE WITH MONKY'S QOL MOD!</ins>
+<img width="500" height="250" alt="image" src="https://github.com/user-attachments/assets/9b504b89-5267-48f7-a515-290699883ac0" />
 
 ## About This Mod
 
