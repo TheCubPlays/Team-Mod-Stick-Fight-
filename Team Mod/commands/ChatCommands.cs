@@ -507,35 +507,4 @@ public static class ChatCommands
         cmd => cmd,
         StringComparer.InvariantCultureIgnoreCase);
     public static readonly List<string> CmdNames = Cmds.Select(cmd => cmd.Name).ToList();
-
-    // QOL Mod's commands, used to detect whether a command executed should use QOL Mod's functionality or not.
-    public static readonly List<string> QolCmdNames = new List<string>
-    {
-        "adv",
-        "fov",
-        "gg",
-        "help",
-        "hp",
-        "id",
-        "invite",
-        "lobhp",
-        "lobregen",
-        "lowercase",
-        "nuky",
-        "mute",
-        "ping",
-        "private",
-        "public",
-        "rainbow",
-        "rich",
-        "shrug",
-        "stat",
-        "suicide",
-        "translate",
-        "uncensor",
-        "uwu",
-        "ver",
-        "winnerhp",
-        "winstreak"
-    };
 }
