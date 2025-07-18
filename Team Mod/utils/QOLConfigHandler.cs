@@ -5,8 +5,11 @@ This is used to gather necessary information regarding the QOL Mod's config sett
 */
 
 using BepInEx;
+using System;
+using System.Reflection;
 using System.IO;
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace TMOD;
 
@@ -174,5 +177,26 @@ public static class QOLConfigHandler
                 break;
         }
         return color;
+    }
+    // Gets QOL Mod's command names
+    public static List<string> GetCmds()
+    {
+        Type ChatCommands = Type.GetType("QOL.ChatCommands, QOL-Mod");
+        if (ChatCommands != null)
+        {
+            var CmdNames_field = ChatCommands.GetField("CmdNames", BindingFlags.Public | BindingFlags.Static);
+            if (CmdNames_field != null)
+            {
+                List<string> Cmds = CmdNames_field.GetValue(null) as List<string>;
+                List<string> CmdNames = [];
+                foreach (string command in Cmds)
+                {
+                    CmdNames.Add(command.Split('/')[1]);
+                }
+                return CmdNames;
+            }
+            else return null;
+        }
+        else return null;
     }
 }
