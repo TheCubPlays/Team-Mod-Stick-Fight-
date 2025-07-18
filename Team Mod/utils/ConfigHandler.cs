@@ -66,7 +66,7 @@ public static class ConfigHandler
 
         teamColorEntry.SettingChanged += (_, _) =>
         {
-            // Similar stuff to what we did on the OnPlayerSpawnMethodPostfix in MultiplayerManagerPatches.cs, you can check that if you need help understanding.
+            // Similar stuff to what we did on the DelayedColorUpdate in Helper.cs, you can check that if you need help understanding.
             var customTeamColor = GetEntry<Color>("TeamColor");
             var isCustomTeamColor = customTeamColor != GetEntry<Color>("TeamColor", true);
 
@@ -112,7 +112,7 @@ public static class ConfigHandler
         };
         enemyColorEntry.SettingChanged += (_, _) =>
         {
-            // Similar stuff to what we did on the OnPlayerSpawnMethodPostfix in MultiplayerManagerPatches.cs, you can check that if you need help understanding.
+            // Similar stuff to what we did on the DelayedColorUpdate in Helper.cs, you can check that if you need help understanding.
             var customEnemyColor = GetEntry<Color>("EnemyColor");
             var isCustomEnemyColor = customEnemyColor != GetEntry<Color>("EnemyColor", true);
 
@@ -212,7 +212,7 @@ public static class ConfigHandler
                 }
                 else
                 {
-                    // Similar stuff to what we did on the OnPlayerSpawnMethodPostfix in MultiplayerManagerPatches.cs, you can check that if you need help understanding.
+                    // Similar stuff to what we did on the DelayedColorUpdate in Helper.cs, you can check that if you need help understanding.
                     Helper.customAllColorToggle = customAllColorToggleEntry.Value;
 
                     var customTeamColor = GetEntry<Color>("TeamColor");
@@ -298,7 +298,7 @@ public static class ConfigHandler
         };
         customTeamColorToggleEntry.SettingChanged += (_, _) =>
         {
-            // Similar stuff to what we did on the OnPlayerSpawnMethodPostfix in MultiplayerManagerPatches.cs, you can check that if you need help understanding.
+            // Similar stuff to what we did on the DelayedColorUpdate in Helper.cs, you can check that if you need help understanding.
             Helper.customTeamColorToggle = customTeamColorToggleEntry.Value;
             var customTeamColor = GetEntry<Color>("TeamColor");
             var isCustomTeamColor = customTeamColor != GetEntry<Color>("TeamColor", true);
@@ -359,7 +359,7 @@ public static class ConfigHandler
         };
         customEnemyColorToggleEntry.SettingChanged += (_, _) =>
         {
-            // Similar stuff to what we did on the OnPlayerSpawnMethodPostfix in MultiplayerManagerPatches.cs, you can check that if you need help understanding.
+            // Similar stuff to what we did on the DelayedColorUpdate in Helper.cs, you can check that if you need help understanding.
             Helper.customEnemyColorToggle = customEnemyColorToggleEntry.Value;
             var customEnemyColor = GetEntry<Color>("EnemyColor");
             var isCustomEnemyColor = customEnemyColor != GetEntry<Color>("EnemyColor", true);
@@ -400,7 +400,7 @@ public static class ConfigHandler
         };
         customAllColorToggleEntry.SettingChanged += (_, _) =>
         {
-            // Similar stuff to what we did on the OnPlayerSpawnMethodPostfix in MultiplayerManagerPatches.cs, you can check that if you need help understanding.
+            // Similar stuff to what we did on the DelayedColorUpdate in Helper.cs, you can check that if you need help understanding.
             Helper.customAllColorToggle = customAllColorToggleEntry.Value;
 
             var customTeamColor = GetEntry<Color>("TeamColor");
