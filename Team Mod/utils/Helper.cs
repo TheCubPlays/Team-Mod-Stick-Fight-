@@ -1,13 +1,14 @@
-// Credits to Monky for a good amount of this
+// Credits to Monky for the Get functions (except the RGB colour one below), the mod output methods and part of InitValues.
 
 using System;
+using System.Collections;
 using HarmonyLib;
 using Steamworks;
 using TMPro;
 using UnityEngine;
 namespace TMOD;
 
-public class Helper
+public class Helper : MonoBehaviour
 {
     // Returns Steam ID of specified colour
     public static CSteamID GetSteamID(ushort targetID) => ClientData[targetID].ClientID;
@@ -30,7 +31,100 @@ public class Helper
 
     // Returns the name of the player using their Steam ID
     public static string GetPlayerName(CSteamID passedClientID) => SteamFriends.GetFriendPersonaName(passedClientID);
+    private static Helper _instance;
+    public static Helper Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                var go = new GameObject("TMOD_Helper");
+                DontDestroyOnLoad(go);
+                _instance = go.AddComponent<Helper>();
+            }
+            return _instance;
+        }
+    }
+    public static IEnumerator DelayedColorUpdate(MultiplayerManager __instance)
+    {
+        yield return new WaitForSeconds(1f); // Delayed execution so that it overrides QOL Mod's functionality if needed
+        var customTeamColor = ConfigHandler.GetEntry<Color>("TeamColor");
+        var isCustomTeamColor = customTeamColor != ConfigHandler.GetEntry<Color>("TeamColor", true);
 
+        var team_color = isCustomTeamColor ? customTeamColor : new Color(0f, 0f, 1f, 1f);
+        var customEnemyColor = ConfigHandler.GetEntry<Color>("EnemyColor");
+        var isCustomEnemyColor = customEnemyColor != ConfigHandler.GetEntry<Color>("EnemyColor", true);
+
+        var enemy_color = isCustomEnemyColor ? customEnemyColor : new Color(1f, 0f, 0f, 1f);
+
+        foreach (var player in FindObjectsOfType<NetworkPlayer>())
+        {
+            if (player.NetworkSpawnID != __instance.LocalPlayerIndex)
+            {
+                // Modifies other players
+                var otherCharacter = player.transform.root.gameObject;
+                // It starts by assuming the player is our teammate.
+                Color otherColor = team_color;
+                // If team colors are disabled, it gives otherColor the default color (Corresponding to the player's spawn ID).
+                if (!(customTeamColorToggle && customAllColorToggle))
+                {
+                    if (!Plugin.isQolEnabled)
+                    {
+                        otherColor = getRGBFromColor(GetColorFromID(player.NetworkSpawnID));
+                    }
+                    else
+                    {
+                        otherColor = QOLConfigHandler.getColor(player.NetworkSpawnID);
+                    }
+                }
+                // If the player turns out not to be our teammate, it gives otherColor the enemy color.
+                if (!ChatCommands.Teammates.Contains(GetColorFromID(player.NetworkSpawnID).ToLower()))
+                {
+                    // If enemy colors are disabled, it gives otherColor the default color.
+                    if (customEnemyColorToggle && customAllColorToggle)
+                    {
+                        otherColor = enemy_color;
+                    }
+                    else
+                    {
+                        if (!Plugin.isQolEnabled)
+                        {
+                            otherColor = getRGBFromColor(GetColorFromID(player.NetworkSpawnID));
+                        }
+                        else
+                        {
+                            otherColor = QOLConfigHandler.getColor(player.NetworkSpawnID);
+                        }
+                    }
+                }
+                if (!useQolColorsToggle || !Plugin.isQolEnabled)
+                {
+                    MultiplayerManagerPatches.ChangeAllCharacterColors(otherColor, otherCharacter);
+                }
+            }
+            else
+            {
+                // Modifies us
+                var character = player.transform.root.gameObject;
+                // If team colors are enabled, make the team color our character's default color.
+                if (!(customTeamColorToggle && customAllColorToggle))
+                {
+                    if (!Plugin.isQolEnabled)
+                    {
+                        team_color = getRGBFromColor(GetColorFromID(player.NetworkSpawnID));
+                    }
+                    else
+                    {
+                        team_color = QOLConfigHandler.isCustomColor() ? QOLConfigHandler.GetCustomColor() : QOLConfigHandler.getColor(player.NetworkSpawnID);
+                    }
+                }
+                if (!useQolColorsToggle || !Plugin.isQolEnabled)
+                {
+                    MultiplayerManagerPatches.ChangeAllCharacterColors(team_color, character);
+                }
+            }
+        }
+    }
     // This sets up and runs stuff when a player joins a lobby
     public static void InitValues(ChatManager __instance, ushort playerID)
     {
@@ -119,4 +213,5 @@ public class Helper
     public static bool customTeamColorToggle = ConfigHandler.GetEntry<bool>("useTeamColor");
     public static bool customEnemyColorToggle = ConfigHandler.GetEntry<bool>("useEnemyColor");
     public static bool customAllColorToggle = ConfigHandler.GetEntry<bool>("useColors");
+    public static bool useQolColorsToggle = ConfigHandler.GetEntry<bool>("useQolColors");
 }
