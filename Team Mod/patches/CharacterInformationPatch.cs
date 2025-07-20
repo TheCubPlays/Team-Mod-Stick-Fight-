@@ -9,7 +9,10 @@ class CharacterInformationPatch
     {
         // If you wanna know how patching works, check FightingPatch.cs because I don't wanna repeat.
         var startMethod = AccessTools.Method(typeof(CharacterInformation), "Start");
-        var startMethodPostfix = new HarmonyMethod(typeof(CharacterInformationPatch).GetMethod(nameof(StartMethodPostfix)));
+        var startMethodPostfix = new HarmonyMethod(typeof(CharacterInformationPatch).GetMethod(nameof(StartMethodPostfix)))
+        {
+            priority = Priority.Last
+        };
         harmonyInstance.Patch(startMethod, postfix: startMethodPostfix);
     }
 
@@ -23,10 +26,19 @@ class CharacterInformationPatch
         var color = isCustomPlayerColor ? customTeamColor : new Color(0f, 0f, 1f, 1f);
         if (!(Helper.customTeamColorToggle && Helper.customAllColorToggle))
         {
-            color = Helper.getRGBFromColor("yellow");
+            if (!Plugin.isQolEnabled)
+            {
+                color = Helper.getRGBFromColor("yellow");
+            }
+            else
+            {
+                color = QOLConfigHandler.isCustomColor() ? QOLConfigHandler.GetCustomColor() : QOLConfigHandler.getColor(0);
+            }
         }
-
-        MultiplayerManagerPatches.ChangeAllCharacterColors(color, __instance.gameObject);
+        if (!Helper.useQolColorsToggle || !Plugin.isQolEnabled)
+        {
+            MultiplayerManagerPatches.ChangeAllCharacterColors(color, __instance.gameObject);
+        }
         Plugin.InitModText();
     }
 }
