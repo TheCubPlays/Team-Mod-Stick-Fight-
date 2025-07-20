@@ -142,30 +142,79 @@ public static class WinTextPatch
                         continue;
                     var player_ID = (ushort)ControllerHandler.Instance.players[i].playerID;
                     var color = Helper.getRGBFromColor(Helper.GetColorFromID((ushort)ControllerHandler.Instance.players[i].playerID));
+                    if (Plugin.isQolEnabled)
+                    {
+                        if (player_ID != GameManager.Instance.mMultiplayerManager.LocalPlayerIndex)
+                        {
+                            color = QOLConfigHandler.getColor(player_ID);
+                        }
+                        else
+                        {
+                            color = QOLConfigHandler.isCustomColor() ? QOLConfigHandler.GetCustomColor() : QOLConfigHandler.getColor(player_ID);
+                        }
+                    }
                     if (player_ID != GameManager.Instance.mMultiplayerManager.LocalPlayerIndex)
                     {
-                        color = team_color;
-                        if (!(Helper.customTeamColorToggle && Helper.customAllColorToggle))
+                        /*
+                        QOL Mod Compatibility
+
+                        If QOL colors are enabled, we use *them* instead for spawn colors.
+                        */
+                        if (!Helper.useQolColorsToggle || !Plugin.isQolEnabled)
                         {
-                            color = Helper.getRGBFromColor(Helper.GetColorFromID(player_ID));
+                            color = team_color;
+                            if (!(Helper.customTeamColorToggle && Helper.customAllColorToggle))
+                            {
+                                if (!Plugin.isQolEnabled)
+                                {
+                                    color = Helper.getRGBFromColor(Helper.GetColorFromID(player_ID));
+                                }
+                                else
+                                {
+                                    color = QOLConfigHandler.getColor(player_ID);
+                                }
+                            }
+                            if (!ChatCommands.Teammates.Contains(Helper.GetColorFromID(player_ID)))
+                            {
+                                if (Helper.customEnemyColorToggle && Helper.customAllColorToggle)
+                                {
+                                    color = enemy_color;
+                                }
+                                else
+                                {
+                                    if (!Plugin.isQolEnabled)
+                                    {
+                                        color = Helper.getRGBFromColor(Helper.GetColorFromID(player_ID));
+                                    }
+                                    else
+                                    {
+                                        color = QOLConfigHandler.getColor(player_ID);
+                                    }
+                                }
+                            }
                         }
-                        if (!ChatCommands.Teammates.Contains(Helper.GetColorFromID(player_ID)))
+                        else
                         {
-                            if (Helper.customEnemyColorToggle && Helper.customAllColorToggle)
-                            {
-                                color = enemy_color;
-                            }
-                            else
-                            {
-                                color = Helper.getRGBFromColor(Helper.GetColorFromID(player_ID));
-                            }
+                            color = QOLConfigHandler.getColor(player_ID);
                         }
                     }
                     else
                     {
-                        if (Helper.customTeamColorToggle && Helper.customAllColorToggle)
+                        /*
+                        QOL Mod Compatibility
+
+                        If QOL colors are enabled, we use *them* instead for spawn colors.
+                        */
+                        if (!Helper.useQolColorsToggle || !Plugin.isQolEnabled)
                         {
-                            color = team_color;
+                            if (Helper.customTeamColorToggle && Helper.customAllColorToggle)
+                            {
+                                color = team_color;
+                            }
+                        }
+                        else
+                        {
+                            color = QOLConfigHandler.isCustomColor() ? QOLConfigHandler.GetCustomColor() : QOLConfigHandler.getColor(player_ID);
                         }
                     }
                     winTexts[i].color = color;
