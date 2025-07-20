@@ -1,4 +1,4 @@
-// Credits to Monky for like.. this entire file
+// Credits to Monky for like.. this entire file (Except for the QOL Mod compatibility changes as of V1.2.1)
 
 using System;
 using System.Collections.Generic;
@@ -16,23 +16,49 @@ public class ChatManagerPatches
     {
         var startMethod = AccessTools.Method(typeof(ChatManager), "Start");
         var startMethodPostfix = new HarmonyMethod(typeof(ChatManagerPatches)
-            .GetMethod(nameof(StartMethodPostfix))); // Patches Start() with postfix method
+            .GetMethod(nameof(StartMethodPostfix)))
+        {
+            priority = Priority.Last // Generally the postfix methods have "Last" priority to override QOL's methods when needed
+        }; // Patches Start() with postfix method
         harmonyInstance.Patch(startMethod, postfix: startMethodPostfix);
-
-        var updateMethod = AccessTools.Method(typeof(ChatManager), "Update");
-        var updateMethodTranspiler = new HarmonyMethod(typeof(ChatManagerPatches)
-            .GetMethod(nameof(UpdateMethodTranspiler))); // Patches Update() with transpiler method
-        harmonyInstance.Patch(updateMethod, transpiler: updateMethodTranspiler);
 
         var stopTypingMethod = AccessTools.Method(typeof(ChatManager), "StopTyping");
         var stopTypingMethodPostfix = new HarmonyMethod(typeof(ChatManagerPatches)
-            .GetMethod(nameof(StopTypingMethodPostfix))); // Patches StopTyping() with postfix method
+            .GetMethod(nameof(StopTypingMethodPostfix)))
+        {
+            priority = Priority.Last
+        }; // Patches StopTyping() with postfix method
         harmonyInstance.Patch(stopTypingMethod, postfix: stopTypingMethodPostfix);
 
         var sendChatMessageMethod = AccessTools.Method(typeof(ChatManager), "SendChatMessage");
         var sendChatMessageMethodPrefix = new HarmonyMethod(typeof(ChatManagerPatches)
-            .GetMethod(nameof(SendChatMessageMethodPrefix)));
+            .GetMethod(nameof(SendChatMessageMethodPrefix)))
+        {
+            priority = Priority.Last
+        };
         harmonyInstance.Patch(sendChatMessageMethod, prefix: sendChatMessageMethodPrefix);
+        var method = AccessTools.Method(typeof(ChatManager), "Update");
+
+        var patchTranspiler = new HarmonyMethod(typeof(ChatManagerPatches).GetMethod(nameof(UpdateMethodTranspiler)))
+        {
+            priority = Priority.Last
+        };
+
+        harmonyInstance.Patch(method, transpiler: patchTranspiler);
+        /*
+        QOL Mod Compatibility
+
+        Removing the "Update" method patch from other mods (Specifically for the QOL Mod, it's so that this mod's autocomplete overrides QOL's autocomplete to prevent issues)
+        */
+        var patchInfo = Harmony.GetPatchInfo(method);
+
+        foreach (var patch in patchInfo.Transpilers)
+        {
+            if (patch.owner != harmonyInstance.Id)
+            {
+                harmonyInstance.Unpatch(method, HarmonyPatchType.Transpiler, patch.owner);
+            }
+        }
     }
     // TODO: Remove unneeded parameters and perhaps this entire method
     public static void StartMethodPostfix(ChatManager __instance)
@@ -90,35 +116,48 @@ public class ChatManagerPatches
 
     public static bool SendChatMessageMethodPrefix(ref string message, ChatManager __instance)
     {
-        if (string.IsNullOrEmpty(message) || Input.GetKey(KeyCode.Escape))
+        if (Input.GetKey(KeyCode.Escape))
         {
             return false;
         }
 
-        if (_backupTextList[0] != message && message.Length <= 350) 
+        if (_backupTextList[0] != message && message.Length <= 350)
         {
             SaveForUpArrow(message);
         }
-
-        if (message[0] == Command.CmdPrefix)
+        if (Plugin.isQolEnabled && (Command.CmdPrefix.ToString() == QOLConfigHandler.GetPrefix()))
         {
-            FindAndRunCommand(message);
-            return false;
+            if (message[0] == Command.CmdPrefix || message[0].ToString() == QOLConfigHandler.GetPrefix())
+            {
+                FindAndRunCommand(message);
+                return false;
+            }
         }
-
+        else
+        {
+            if (message[0] == Command.CmdPrefix)
+            {
+                FindAndRunCommand(message);
+                return false;
+            }
+        }
         return true;
     }
     private static void FindAndRunCommand(string message)
     {
         Debug.Log("User is trying to run a command...");
-        var args = message.TrimStart(Command.CmdPrefix).Trim().Split(' '); // Sanitising input
+        var args = message.TrimStart(Command.CmdPrefix).Trim().Split(' ').Select(arg => arg.ToLower()).ToArray(); // Sanitising input
 
         var targetCommandTyped = args[0];
-
+        
         if (!ChatCommands.CmdDict.ContainsKey(targetCommandTyped)) // If command is not found
         {
-            Helper.SendModOutput("Specified command or it's alias not found. See /help for full list of commands.",
-                Command.LogType.Warning, false);
+            if (Plugin.isQolEnabled && (Command.CmdPrefix.ToString() == QOLConfigHandler.GetPrefix()) && QOLConfigHandler.GetCmds().Contains(targetCommandTyped)) // Check if it's a QOL Mod command
+            {
+                return;
+            }
+            // Otherwise, the Team Mod will handle the case.
+            Helper.SendModOutput("Specified command not found.", Command.LogType.Warning, false);
             return;
         }
 
@@ -140,7 +179,6 @@ public class ChatManagerPatches
 
             return;
         }
-
         if (Input.GetKeyDown(KeyCode.DownArrow) && _upArrowCounter > 0)
         {
             _upArrowCounter--;
@@ -152,19 +190,39 @@ public class ChatManagerPatches
 
             return;
         }
-
         const string rTxtFmt = "<#000000BB><u>";
         var txt = chatField.text;
         var txtLen = txt.Length;
         var parsedTxt = chatField.textComponent.GetParsedText();
         // Remove last char of non-richtext str since a random space is added from GetParsedText() 
         parsedTxt = parsedTxt.Remove(parsedTxt.Length - 1);
+        /*
+        QOL Mod Compatibility
 
-        if (txtLen > 0 && txt[0] == Command.CmdPrefix)
+        Adding QOL Mod's commands in the autocomplete as well
+        */
+        if (txt == "")
+        {
+            return;
+        }
+        List<string> QolCmdNames = QOLConfigHandler.GetCmds();
+        var prefix = Command.CmdPrefix.ToString();
+        List<string> CmdNames_QOL = ChatCommands.CmdNames;
+        if (Plugin.isQolEnabled && (Command.CmdPrefix.ToString() == QOLConfigHandler.GetPrefix())) // Both mods' commands will be autocompleted
+        {
+            prefix = Command.CmdPrefix.ToString();
+            CmdNames_QOL = ChatCommands.CmdNames.Concat(QolCmdNames.Select(cmd => prefix + cmd)).ToList();
+        }
+        else if (Plugin.isQolEnabled && (txt[0].ToString() == QOLConfigHandler.GetPrefix())) // Only the Qol Mod's commands will be autocompleted
+        {
+            prefix = QOLConfigHandler.GetPrefix();
+            CmdNames_QOL = QolCmdNames.Select(cmd => prefix + cmd).ToList();
+        } // Otherwise, the Team Mod's commands will be autocompleted
+        if (txtLen > 0 && txt[0].ToString() == prefix)
         {
             // Credit for this easy way of getting the closest matching string from a list
             //https://forum.unity.com/threads/auto-complete-text-field.142181/#post-1741569
-            var cmdsMatched = ChatCommands.CmdNames.FindAll(
+            var cmdsMatched = CmdNames_QOL.FindAll(
                 word => word.StartsWith(parsedTxt, StringComparison.InvariantCultureIgnoreCase));
 
             if (cmdsMatched.Count > 0)
@@ -194,12 +252,12 @@ public class ChatManagerPatches
                 }
 
                 chatField.richText = true;
-                chatField.text += txtLen <= cmdMatchLen ? rTxtFmt + cmdMatch.Substring(txtLen) : Command.CmdPrefix;
+                chatField.text += txtLen <= cmdMatchLen ? rTxtFmt + cmdMatch.Substring(txtLen) : prefix;
             }
             else if (chatField.richText)
             { // Already a cmd typed
                 var cmdAndParam = parsedTxt.Split(' ');
-                var cmdDetectedIndex = ChatCommands.CmdNames.IndexOf(cmdAndParam[0]);
+                var cmdDetectedIndex = CmdNames_QOL.IndexOf(cmdAndParam[0]);
 
                 if (cmdDetectedIndex == -1)
                 {
@@ -207,20 +265,26 @@ public class ChatManagerPatches
                     if (effectStartPos == -1)
                         // This will only occur if a cmd is fully typed and then more chars are added after
                         return;
-
                     chatField.text = txt.Remove(effectStartPos);
                     return;
                 }
-
-                var cmdMatch = ChatCommands.CmdNames[cmdDetectedIndex];
-                var targetCmd = ChatCommands.CmdDict[cmdMatch.Substring(1)];
+                var cmdMatch = CmdNames_QOL[cmdDetectedIndex];
+                Dictionary<string, Command> QolCmdDict = QOLConfigHandler.GetCmds().ToDictionary(cmd => cmd, cmd => new Command(cmd, (args, self) => { }, 0, false,
+                new List<string>()),
+                StringComparer.InvariantCultureIgnoreCase);
+                Dictionary<string, Command> allDict = ChatCommands.CmdDict
+                    .Concat(QolCmdDict)
+                    .ToDictionary(
+                        pair => pair.Key,
+                        pair => pair.Value,
+                        StringComparer.InvariantCultureIgnoreCase);
+                var targetCmd = allDict[cmdMatch.Substring(1)];
                 var targetCmdParams = targetCmd.AutoParams;
-
                 if (targetCmdParams == null) return; // Cmd may not take any params
                 if (cmdAndParam.Length <= 1 || cmdAndParam[0].Length != cmdMatch.Length) return;
 
                 // Focusing on auto-completing the parameter now
-                var paramTxt = cmdAndParam![1].Replace(" ", "");
+                var paramTxt = cmdAndParam![1].Replace(" ", "");;
                 var paramTxtLen = paramTxt.Length;
 
                 //Debug.Log("paramTxt: \"" + paramTxt + "\"");
