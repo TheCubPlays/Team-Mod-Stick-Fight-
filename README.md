@@ -57,8 +57,8 @@ All commands are <ins>case insensitive</ins> (So "/prefix" = "/pReFiX")
 
 **QOL Compatibility Commands (Must have [QOL Mod](https://github.com/Mn0ky/QOL-Mod) installed)**
 
-- Added `/useQolColors`: Shows the current option for useQolColors (True/False).
-- Added `/useQolColors [true/false]`: When true, the QOL Mod's color functionality will completely replace the Team Mod's functionality. This means that all team color configuration options are ignored and they will not affect the game. By default it's false.
+- Added `/useQolColors`: Shows the current option for **useQolColors** (True/False).
+- Added `/useQolColors [true/false]`: When **true**, the QOL Mod's color functionality will completely replace the Team Mod's functionality. This means that all team color configuration options are ignored and they will not affect the game. By default it's **false**.
 
 ### <ins> Notes </ins>
 
@@ -66,6 +66,7 @@ All commands are <ins>case insensitive</ins> (So "/prefix" = "/pReFiX")
 - If the last players standing are of the same team, the round won't end. That's mainly because if that was a thing, the mod could be used as a cheat client.
 - There's no limit to the amount of teammates you can have. It could be a 4v0, 3v1, 2v2, 2v1 and 1v1.
 - **Grenade Launcher & Spike Ball** will damage your teammates. That's because they can damage you in the vanilla game, so it'd be weird if they can't damage your teammates as well.
+- (If you have the [QOL Mod](https://github.com/Mn0ky/QOL-Mod) installed) Regardless of whether `/useQolColors` is set to **true** or **false**, the game's default colors will match QOL Mod's default colors. For example: If enemy colors are disabled, instead of using the game's default spawn colors (which is what would normally happen if you didn't have the QOL Mod installed), the colors that will be used for the enemy team are QOL Mod's default colors (Which implies you can configure them in `monky.plugins.QOL.cfg` and set them to whatever color you'd like!)
 
 ## How To Use
 
