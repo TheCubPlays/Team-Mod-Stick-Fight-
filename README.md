@@ -83,7 +83,7 @@ Now, start the fight! :)
 2. Go to your steam games, right click stick fight and go to `Manage > Browse Local Files`. The `StickFightTheGame` folder should open.
 3. Extract the zip file you downloaded, a folder will be created. Drag all of the newly created folder's contents to the `StickFightTheGame` folder. (`BepInEx`, `changelog.txt`, `winhttp.dll` etc.)
 4. Now start the game and exit once it loads. Now BepInEx should have generated the necessary files & folders.
-5. Download the latest version of the team mod (https://github.com/TheCubPlays/Team-Mod-Stick-Fight-/releases/tag/v1.1.1).
+5. Download the latest version of the team mod (https://github.com/TheCubPlays/Team-Mod-Stick-Fight-/releases/tag/v1.2.2).
 6. Now go back to step 3's folder (`StickFightTheGame` folder) and there should be a BepInEx folder now.
 7. Go to `BepInEx > Plugins`.
 8. In this place, put the **.dll** file from the **zip** file. Either by manually dragging it there or extracting the zip file.
