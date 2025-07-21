@@ -55,11 +55,17 @@ All commands are <ins>case insensitive</ins> (So "/prefix" = "/pReFiX")
 - `/reset teamColor`: Resets the teamColor option to default value.
 - `/reset enemyColor`: Resets the enemyColor option to default value.
 
+**QOL Compatibility Commands (Must have [QOL Mod](https://github.com/Mn0ky/QOL-Mod) installed)**
+
+- Added `/useQolColors`: Shows the current option for useQolColors (True/False).
+- Added `/useQolColors [true/false]`: When true, the QOL Mod's color functionality will completely replace the Team Mod's functionality. This means that all team color configuration options are ignored and they will not affect the game. By default it's false.
+
 ### <ins> Notes </ins>
 
 - Your team's win counter won't necessarily have the same colour as your stickman, it has the team's colour. This means that if `useColors` is false (which means custom colors are disabled), your team's win counter will still have the team's colour regardless of you having default colors.
 - If the last players standing are of the same team, the round won't end. That's mainly because if that was a thing, the mod could be used as a cheat client.
 - There's no limit to the amount of teammates you can have. It could be a 4v0, 3v1, 2v2, 2v1 and 1v1.
+- **Grenade Launcher & Spike Ball** will damage your teammates. That's because they can damage you in the vanilla game, so it'd be weird if they can't damage your teammates as well.
 
 ## How To Use
 
@@ -98,14 +104,13 @@ Don't change the default values, the `/reset` commands use them to reset your se
 
 ## Known Issues
 
-- **Grenades** can damage your teammates. However, this isn't necessarily an issue since it'd be weird if grenades didn't damage your teammates assuming they damage you in the vanilla game.
 - **Glue gun** can affect your teammates, it won't damage them but it'll still get them stuck.
 - **Ice gun** won't damage or slow down your teammates, however it will still give them the ice particle making it look like it'll slow them down even though it won't.
 - **Thrusters** will still hurt your teammates with fire.
-- **Spike Ball** can damage your teammates.
 - Sometimes, the custom colors can have weird bugs. Not sure what causes that yet, the bug itself is very inconsistent. It has a chance to occur when you change the player colors in-game. However I don't think this will happen often. When it happens, you have to rejoin the lobby.
 - If you block your teammate's bullet, it'll damage them if it hits them.
 - The command auto-complete doesn't work with parameters yet.
+- (If you have the [QOL Mod](https://github.com/Mn0ky/QOL-Mod) installed) Every version of the QOL Mod up to v1.18.0 has a certain bug. After a certain arrow sequence when using the chatbox, your message will be sent when you press "escape" even when you don't want it to. The Team Mod alone doesn't have this bug but it will occur if you use any versions of the QOL Mod before v1.18.2. I believe the bug was fixed in v1.18.2, but I'm not sure if that release is available for people or not.
 
 ## Credits & License Notice
 
