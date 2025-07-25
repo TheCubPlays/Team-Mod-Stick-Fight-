@@ -1,3 +1,5 @@
+![Made with C#](https://img.shields.io/badge/Made%20with-C%23-red?style=flat&logo=c-sharp) ![GitHub downloads](https://img.shields.io/github/downloads/TheCubPlays/Team-Mod-Stick-Fight-/total?color=brightgreen) [![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0)
+
 <img width="500" height="250" alt="image" src="https://github.com/user-attachments/assets/9b504b89-5267-48f7-a515-290699883ac0" />
 
 ## About This Mod
